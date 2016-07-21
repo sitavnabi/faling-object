@@ -1,0 +1,159 @@
+&lt;!doctype html&gt;
+
+&lt;html lang=&quot;en&quot;&gt;
+
+&lt;head&gt;
+
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+
+&lt;title&gt;CH5EX14: Simple Gravity&lt;/title&gt;
+
+&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js&quot;&gt;&lt;/script&gt;
+
+&lt;script type=&quot;text/javascript&quot;&gt;
+
+window.addEventListener(&#39;load&#39;, eventWindowLoaded, false);
+
+var theCanvas=null,
+
+context=null,
+
+interval=0;
+
+function eventWindowLoaded() {
+
+canvasApp();
+
+}
+
+function canvasSupport () {
+
+return Modernizr.canvas;
+
+}
+
+function canvasApp() {
+
+if (!canvasSupport()) {
+
+return;
+
+}
+
+function drawScreen () {
+
+context.fillStyle = &#39;#EEEEEE&#39;;
+
+context.fillRect(0, 0, theCanvas.width, theCanvas.height);
+
+//Box
+
+context.strokeStyle = &#39;#000000&#39;;
+
+context.strokeRect(1, 1, theCanvas.width-2, theCanvas.height-2);
+
+if (ball.y + ball.radius &lt;= theCanvas.height) {
+
+ball.velocityy += gravity;
+
+} else {
+
+ball.velocityx = 0;
+
+ball.velocityy = 0;
+
+ball.y = theCanvas.height - ball.radius;
+
+}
+
+ball.y += ball.velocityy;
+
+ball.x += ball.velocityx;
+
+context.fillStyle = &quot;#000000&quot;;
+
+context.beginPath();
+
+context.arc(ball.x,ball.y,ball.radius,0,Math.PI*2,true);
+
+context.closePath();
+
+context.fill();
+
+}
+
+var speed = 4;
+
+var gravity =eval(document.getElementById(&quot;txtGravity&quot;).value);
+
+var angle = eval(document.getElementById(&quot;txtAngle&quot;).value);
+
+var radians = angle * Math.PI/ 180;
+
+var radius = 15;
+
+var vx = Math.cos(radians) * speed;
+
+var vy = Math.sin(radians) * speed;
+
+if(context==null){
+
+theCanvas = document.getElementById(&quot;canvasOne&quot;);
+
+context = theCanvas.getContext(&quot;2d&quot;);
+
+}
+
+var p1 = {x:20,y:150};
+
+var ball = {x:p1.x, y:p1.y, velocityx: vx, velocityy:vy, radius:radius};
+
+interval=setInterval(drawScreen, parseInt(document.getElementById(&quot;txtSpeed&quot;).value));
+
+}
+
+function startAnimation(){
+
+clearInterval(interval);
+
+canvasApp();
+
+}
+
+&lt;/script&gt;
+
+&lt;/head&gt;
+
+&lt;body&gt;
+
+&lt;p&gt;
+
+Speed : &lt;input type=&quot;number&quot; id=&quot;txtSpeed&quot; value=&quot;10&quot; onchange=&quot;startAnimation()&quot;/&gt;
+
+&lt;/p&gt;
+
+&lt;p&gt;
+
+Gravity : &lt;input type=&quot;number&quot; id=&quot;txtGravity&quot; value=&quot;.1&quot; onchange=&quot;startAnimation()&quot;/&gt;
+
+&lt;/p&gt;
+
+&lt;p&gt;
+
+Angle : &lt;input type=&quot;number&quot; id=&quot;txtAngle&quot; value=&quot;90&quot; onchange=&quot;startAnimation()&quot;/&gt;
+
+&lt;/p&gt;
+
+&lt;div style=&quot;position: absolute; top: 140px; left: 50px;&quot;&gt;
+
+&lt;canvas id=&quot;canvasOne&quot; width=&quot;500&quot; height=&quot;500&quot;&gt;
+
+Your browser does not support HTML5 Canvas.
+
+&lt;/canvas&gt;
+
+&lt;/div&gt;
+
+&lt;/body&gt;
+
+&lt;/html&gt;
